@@ -22,7 +22,7 @@ export default function Memo() {
           likes: `likes${prevComments.length +1}`
         }
       ])
-    }, 2000)
+    }, 10000)
   
     return () => {
       clearInterval(interval);

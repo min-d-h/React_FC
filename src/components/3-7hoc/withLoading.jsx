@@ -5,7 +5,7 @@ export default function withLoading(Component) {
   const WithLoadingComponent = (props) => { // ---A
 
   const [loading, setLoading] = useState(true)
-  // const [timeout, setTimeout] = useState("")
+  const [timeout, setTimeout] = useState("")
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000)

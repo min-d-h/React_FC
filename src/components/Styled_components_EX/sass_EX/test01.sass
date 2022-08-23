@@ -1,0 +1,192 @@
+@use 'base/_base'
+  
+$font-stack: Helvetica, sans-serif
+$primary-color: red
+$aaa : blue
+
+p
+  margin: 20px 0 
+
+hr
+  height: 10px
+
+.font
+  font: 100% $font-stack
+  color: $aaa
+
+
+
+nav
+  ul
+    margin: 0
+    padding: 0
+    list-style: none
+
+  li
+    display: inline-block
+    color: aaa
+
+  a
+    display: block
+    padding: 6px 12px
+    text-decoration: none
+
+
+.inverse
+  background-color: base.$primary-color
+  width: 100%
+  color: white
+
+
+
+@mixin theme($theme: darkgray)
+  background: $theme
+  box-shadow: 0 0 1px rgba($theme, .25)
+  color: #fff
+
+
+.info
+  @include theme
+
+.alert
+  @include theme($theme: darkred)
+
+.success
+  @include theme($theme: darkgreen)
+
+
+%message-shared
+  border: 1px solid #ccc
+  padding: 10px
+  color: #333
+
+
+
+%equal-heights
+  display: flex
+  flex-wrap: wrap
+
+
+.message
+  @extend %message-shared 
+  @extend %equal-heights
+
+
+.success2
+  @extend %message-shared
+  border-color: green
+
+
+.error
+  @extend %message-shared
+  border-color: red
+
+
+.warning
+  @extend %message-shared
+  border-color: yellow
+
+
+@mixin avatar($size, $circle: false)
+  width: $size
+  height: $size
+  background-color: hotpink
+
+  @if $circle
+    border-radius: $size / 2
+
+.square-av
+  @include avatar(100px, $circle: false)
+.circle-av
+  @include avatar(100px, $circle: true)
+
+
+// function 사용
+
+@function pow($base, $exponent)
+  $result: 1
+  @for $_ from 1 through $exponent
+    $result: $result * $base
+
+  @return $result
+
+// for문을 돌리는데 1부터 exponent까지 돌릴꺼야.
+// base 숫자부터 시작 해서 3번 돌릴꺼야.
+// result * base 를 하고 그것을 result에 넣고
+// result를 return할꺼야.
+
+// base - 4
+// exponent - 3
+
+// 1 * 4 = 4
+// 4 * 4 = 16
+// 16 * 4 = 64
+
+
+.sidebar
+  float: left
+  margin-left: pow(4, 3) * 1px
+
+
+@mixin reflexive-position($property, $value)
+  @if $property != left and $property != right
+    @error "Property #{$property} must be either left or right."
+
+
+  $left-value: if($property == right, initial, $value)
+  $right-value: if($property == right, $value, initial)
+
+  left: $left-value
+  right: $right-value
+  [dir=rtl] &
+    left: $right-value
+    right: $left-value
+
+
+.sidebar
+  @include reflexive-position(right, 12px)
+
+
+
+@mixin prefix($property, $value, $prefixes)
+  @each $prefix in $prefixes
+    -#{$prefix}-#{$property}: $value
+
+  #{$property}: $value
+
+
+.gray
+  @include prefix(filter, grayscale(50%), moz webkit)
+
+button
+  @include prefix(background, linear-gradient(red, yellow), moz webkit)
+
+
+// interpolation
+// duration을 주입해주고,
+// name은 inline-#{unique-id()} 주입해서 만들어지고
+// animation-duration은 상단에 duration을 주입한 값이 되고
+// @content는 pulse > @include inline-animation(2s) 의 값을 들고있는것이다.
+
+// $name: 에 값을 줄껀데,
+// inline-  으로 줄꺼야. 근데 그 값이 고정값이 아니고,
+// #{unique-id()} 변수값을 넣어줄꺼야.
+
+@mixin inline-animation($duration)
+  $name: inline-#{unique-id()}
+
+  @keyframes #{$name}
+    @content
+
+
+  animation-name: $name
+  animation-duration: $duration
+  animation-iteration-count: infinite
+
+
+.pulse
+  @include inline-animation(2s)
+    from
+      background-color: red
+    to
+      background-color: blue

@@ -12,8 +12,8 @@ function Greeting (props) {
 }
 export default function conditional() {
     
-    const isLoggedIn = true;
-    // const isLoggedIn = false;
+    // const isLoggedIn = true;
+    const isLoggedIn = false;
 
     return (
         <div>

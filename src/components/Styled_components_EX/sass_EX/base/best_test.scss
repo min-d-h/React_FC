@@ -1,0 +1,63 @@
+@mixin blind {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  white-space: nowrap;
+  clip: rect(0, 0, 0, 0);
+}
+
+.aaaa {
+    @include blind;
+  }
+
+@mixin ellipsis($lines: 1) {
+  @if ($lines==1) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+  }
+}
+
+
+
+
+.button {
+  font-weight: bold;
+  border-width: 4px;
+}
+
+.button-confirm {
+  @extend .button;
+  border-color: blue;
+}
+
+.button-error {
+  @extend .button;
+  border-color: red;
+}
+
+
+%title {
+  color: blue;
+  font-weight: bold;
+}
+
+.title-main {
+  @extend %title;
+  font-size: 30px;
+}
+
+.title-sub {
+  @extend %title;
+  font-size: 18px;
+}
